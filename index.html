@@ -845,10 +845,24 @@ window.saveSettings = function() {
 };
 
 /* ── MOOD BACKGROUNDS ───────────────────────── */
+const MOOD_GLOWS = {
+  default:   'rgba(184,152,106,0.18)',
+  grief:     'rgba(140,140,160,0.22)',
+  longing:   'rgba(125,144,217,0.24)',
+  rain:      'rgba(79,163,196,0.24)',
+  nostalgia: 'rgba(196,151,90,0.22)',
+  emptiness: 'rgba(50,50,50,0.10)',
+  anger:     'rgba(196,64,64,0.28)',
+  hope:      'rgba(106,173,194,0.24)',
+  love:      'rgba(196,104,120,0.28)',
+};
+
 function applyMood(mood) {
-  if (activeMood === mood) return;
   activeMood = mood;
   document.body.className = mood !== 'default' ? `mood-${mood}` : '';
+  const glow = MOOD_GLOWS[mood] || MOOD_GLOWS.default;
+  document.getElementById('mood-bg').style.background =
+    `radial-gradient(ellipse 120% 70% at 50% 0%, ${glow} 0%, transparent 65%)`;
   startParticles(MOODS[mood]?.px || 'none');
 }
 
