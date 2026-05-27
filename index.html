@@ -845,24 +845,33 @@ window.saveSettings = function() {
 };
 
 /* ── MOOD BACKGROUNDS ───────────────────────── */
-const MOOD_GLOWS = {
-  default:   'rgba(184,152,106,0.18)',
-  grief:     'rgba(140,140,160,0.22)',
-  longing:   'rgba(125,144,217,0.24)',
-  rain:      'rgba(79,163,196,0.24)',
-  nostalgia: 'rgba(196,151,90,0.22)',
-  emptiness: 'rgba(50,50,50,0.10)',
-  anger:     'rgba(196,64,64,0.28)',
-  hope:      'rgba(106,173,194,0.24)',
-  love:      'rgba(196,104,120,0.28)',
+const MOOD_CONFIG = {
+  default:   { bg: '#09090e', glow: 'rgba(184,152,106,0.30)', top: 'rgba(184,152,106,0.12)' },
+  grief:     { bg: '#0b0b10', glow: 'rgba(100,100,130,0.55)', top: 'rgba(80,80,120,0.22)'   },
+  longing:   { bg: '#08091a', glow: 'rgba(90,110,200,0.60)',  top: 'rgba(70,90,180,0.28)'   },
+  rain:      { bg: '#060e14', glow: 'rgba(40,130,170,0.60)',  top: 'rgba(30,120,160,0.28)'  },
+  nostalgia: { bg: '#120e05', glow: 'rgba(190,140,60,0.55)',  top: 'rgba(170,120,40,0.22)'  },
+  emptiness: { bg: '#050505', glow: 'rgba(40,40,40,0.70)',    top: 'rgba(20,20,20,0.10)'    },
+  anger:     { bg: '#120404', glow: 'rgba(200,40,40,0.60)',   top: 'rgba(180,20,20,0.28)'   },
+  hope:      { bg: '#060d14', glow: 'rgba(70,160,190,0.55)',  top: 'rgba(50,140,170,0.22)'  },
+  love:      { bg: '#12060a', glow: 'rgba(200,80,110,0.60)',  top: 'rgba(180,60,90,0.26)'   },
 };
 
 function applyMood(mood) {
   activeMood = mood;
   document.body.className = mood !== 'default' ? `mood-${mood}` : '';
-  const glow = MOOD_GLOWS[mood] || MOOD_GLOWS.default;
-  document.getElementById('mood-bg').style.background =
-    `radial-gradient(ellipse 120% 70% at 50% 0%, ${glow} 0%, transparent 65%)`;
+  const cfg = MOOD_CONFIG[mood] || MOOD_CONFIG.default;
+
+  // Change body background
+  document.body.style.background = cfg.bg;
+
+  // Set full-screen gradient overlay
+  const bg = document.getElementById('mood-bg');
+  bg.style.background = [
+    `radial-gradient(ellipse 160% 80% at 50% -10%, ${cfg.glow} 0%, transparent 60%)`,
+    `radial-gradient(ellipse 100% 50% at 50% 100%, ${cfg.top} 0%, transparent 60%)`
+  ].join(', ');
+
   startParticles(MOODS[mood]?.px || 'none');
 }
 
